@@ -1,46 +1,65 @@
-# Movie explorer — full-stack project
+# Movie Explorer — discovery and account-backed favorites
 
-Discover movies through a server-side provider proxy and keep unique favorites in your account.
+Browse and search movie cards, inspect movie information, and keep a personal favorites collection. Provider requests go through the backend so the TMDB credential is not sent to the browser.
 
-**Frontend:** React 19 and Vite. **Backend:** Node.js 24, HTTP API, SQLite, and account sessions.
+**Demo status:** Local full-stack app; screenshots/video use labeled provider fixtures. Live provider integration requires credentials.
 
-The server proxy validates movie routes, bounds paging, and applies provider timeouts. Favorites prevent duplicate movie IDs per account. The React interface handles loading and provider failures.
+![Main application interface](docs/screenshots/main.png)
+
+![Saved result of the workflow](docs/screenshots/saved.png)
+
+[Watch the short local demo](docs/demos/walkthrough.mp4) · [Repeat the demo](docs/DEMO.md)
+
+## Main workflow
+
+Search a title → inspect the result → save a favorite → reopen Favorites after a refresh.
+
+## Architecture and decisions
+
+React 19 and Vite → Node.js 24 movie-provider proxy and account API → SQLite favorites. TMDB supplies movie discovery data when configured.
+
+- The proxy allows specific movie routes, bounds pagination and applies a provider timeout.
+- A movie ID can appear only once in an account’s favorites.
+- The frontend displays loading and provider errors; saved favorites belong to the current account.
+
+Accounts use salted scrypt password hashes and expiring HttpOnly sessions. The shared account/API foundation is reused across these portfolio applications; the domain behavior above is specific to this project.
 
 ## Run locally
 
-```bash
+Use Node.js 24. From this repository in PowerShell:
+
+```powershell
 npm ci
-cp .env.example .env
-# Set TMDB_API_KEY in .env
+Copy-Item .env.example .env
+# Edit .env: set TMDB_API_KEY for live discovery.
 npm run build
 npm run start:api
 ```
 
-Open <http://localhost:4000>, choose **Sign in · Account**, and create your local owner account. **My workspace** opens the stored workflows. The first account manages owner-only resources; later accounts receive member access and private account data.
+Open http://localhost:4000. Choose **Sign in · Account**, then **Create an account**. Use a password of 12–128 characters. The first account receives owner access; later accounts receive member access. Saved local data lives in the ignored `.data/` directory.
 
-## Implementation
+For live frontend development, run `npm run start:api` and `npm run dev` in separate terminals. Keep `.env` untracked.
 
-- Salted scrypt password hashes, rotated HttpOnly sessions, seven-day expiry, and owner/member roles.
-- SQLite-backed `favorites` workflows with access checks and server-side validation.
-- Connected account screens for saved records, search, paging, and activity; resource permissions control available actions.
-- Transactional writes, retry keys, version-aware edits to mutable records, bounded requests, and protected server files.
+## No-cost provider fixture mode
 
-[Routes, storage design, and access rules](docs/backend.md) · [Workspace preview](docs/workspace-preview.jpg)
+After installing dependencies and building the frontend, stop the normal server and run:
 
-![Account workspace](docs/workspace-preview.jpg)
+```powershell
+node scripts/demo-fixtures.cjs
+```
+
+This uses a separate `.data/fixture-demo.sqlite` database and never calls the inference/movie provider. Create an account in this mode. Movie titles are fictional. The recording includes locally drawn poster fixtures; the launcher uses the app’s ordinary no-poster placeholder.
 
 ## Verification
 
-`npm run test:api` passes **4 backend tests**, covering account security, session expiry/persistence, access control, validation, and the repository workflow.
+```powershell
+npm run test:api
+```
 
-The account/resource flow passes browser checks at 375px and 1280px without page JavaScript errors or horizontal overflow in those flows. [GitHub Actions](.github/workflows/fullstack.yml) runs backend checks plus frontend lint and production build on pushes and pull requests.
+The backend suite exercises account security and the application’s domain workflow. CI also runs lint and the frontend build. See [GitHub Actions](.github/workflows/fullstack.yml) and [backend reference](docs/backend.md). Capture details and their limits are recorded in [the demo guide](docs/DEMO.md).
 
-## Provider and development
+## Limits
 
-`TMDB_API_KEY` stays in the backend environment. Provider tests use mocks; live discovery needs your credential. For development, run `npm run start:api` and `npm run dev` in separate terminals. Vite proxies API and account assets to port 4000.
+Live TMDB discovery requires a working backend credential. The recorded demo uses labeled local movie fixtures; it does not verify live provider access. A GitHub Pages/static preview cannot run this Node API.
 
-## Project context
-
-[Mustafa Sarwari](https://github.com/mustafa-sarwari) — junior full-stack developer building deeper frontend integration, server validation, authentication, database, and testing skills. The HTTP/account workspace foundation is reused across these portfolio projects; each project’s domain behavior is described above. Original community content, educational fixtures, and licenses remain attributed.
-
-A Node runtime is required for accounts, persistence, provider proxies, and webhooks. Static previews show frontend assets. Demonstration orders do not process payments; stored requests are not emailed. Live provider/store credentials have not been exercised by the fixture tests.
+Built and maintained by [Mustafa Sarwari](https://github.com/mustafa-sarwari). Existing source credits and licenses are preserved.
