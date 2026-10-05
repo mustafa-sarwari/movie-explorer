@@ -1,28 +1,14 @@
-/* import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client';
+import { HashRouter } from 'react-router-dom';
+import App from './App.jsx';
 import './CSS/index.css';
-import App from './App.jsx'
-import {BrowserRouter} from 'react-router-dom';
+import { previewMode } from './services/preview';
 
+if (!previewMode) {
+  const script = document.createElement('script');
+  script.src = '/account.js';
+  document.head.append(script);
+}
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>
-  </StrictMode>
-)
- */
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./CSS/index.css";
-import { HashRouter } from "react-router-dom";
-import { MovieProvider  } from "./context/MovieContext.jsx"
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <HashRouter>
-    <MovieProvider>
-      <App />
-    </MovieProvider>
-  </HashRouter>
+  <HashRouter><App /></HashRouter>
 );

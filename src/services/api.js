@@ -1,4 +1,6 @@
+import { previewMode, previewRequest } from './preview';
 export async function movieRequest(path, signal) {
+  if (previewMode) { signal?.throwIfAborted(); return previewRequest(path); }
   const response = await fetch('/api/movies' + path, { signal });
   const body = await response.json();
   if (!response.ok) throw new Error(body.error || 'Unable to load movies.');
@@ -12,3 +14,4 @@ export async function searchMovies(query, signal) {
   const body = await movieRequest(`/search?query=${encodeURIComponent(query)}`, signal);
   return Array.isArray(body.results) ? body.results : [];
 }
+

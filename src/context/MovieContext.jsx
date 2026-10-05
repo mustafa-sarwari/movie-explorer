@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { MovieContext } from './useMovieContext';
-const localMode = location.hostname.endsWith('github.io');
+import { previewMode as localMode } from '../services/preview';
 function storedFavorites() {
   try { const rows = JSON.parse(localStorage.getItem('favorites') || '[]'); return Array.isArray(rows) ? rows.filter(row => row && Number.isInteger(row.id)) : []; }
   catch { return []; }
@@ -48,3 +48,4 @@ export function MovieProvider({ children }) {
     {error && <p role="alert">{error}</p>}{children}
   </MovieContext.Provider>;
 }
+

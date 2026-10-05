@@ -15,11 +15,11 @@ function MovieCard({ movie }) {
     <Link to = {`/movie/${movie.id}`} className="movie-card">
       
       <div className="movie-poster">
-        <img 
-          src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : `https://via.placeholder.com/500x750?text=No+Image`} 
-          alt={movie.title || 'Movie poster'}
-          loading="lazy"
-        />
+        {movie.poster_path ? <img
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          alt={movie.title || 'Movie poster'} loading="lazy"
+        /> : <div className="poster-placeholder"><span>Movie Explorer</span><strong>{movie.title}</strong><span>Poster unavailable</span></div>}
+
 
           <div className="movie-overlay">
               <button 
