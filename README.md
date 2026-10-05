@@ -10,6 +10,8 @@ Browse and search movie cards, inspect movie information, and keep a personal fa
 
 [Watch the short local demo](docs/demos/walkthrough.mp4) · [Repeat the demo](docs/DEMO.md)
 
+[Open the interactive preview](https://mustafa-sarwari.github.io/movie-explorer/) — fictional sample movies, search, details, and browser-saved favorites.
+
 ## Main workflow
 
 Search a title → inspect the result → save a favorite → reopen Favorites after a refresh.
