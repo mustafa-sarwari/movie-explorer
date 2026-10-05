@@ -2,7 +2,7 @@
 
 Browse and search movie cards, inspect movie information, and keep a personal favorites collection. Provider requests go through the backend so the TMDB credential is not sent to the browser.
 
-**Demo status:** Local full-stack app; screenshots/video use labeled provider fixtures. Live provider integration requires credentials.
+**Demo status:** The full-stack app runs locally. A separate GitHub Pages preview uses fictional sample movies and browser-only favorites; it does not provide accounts or live TMDB results. Screenshots/video use labeled provider fixtures. Live provider integration requires credentials.
 
 ![Main application interface](docs/screenshots/main.png)
 
@@ -63,3 +63,12 @@ The backend suite exercises account security and the application’s domain work
 Live TMDB discovery requires a working backend credential. The recorded demo uses labeled local movie fixtures; it does not verify live provider access. A GitHub Pages/static preview cannot run this Node API.
 
 Built and maintained by [Mustafa Sarwari](https://github.com/mustafa-sarwari). Existing source credits and licenses are preserved.
+
+
+## Deploy the static preview to GitHub Pages
+
+The Pages workflow builds Vite with `--mode pages` and uploads only `dist/`. In repository **Settings → Pages**, select **GitHub Actions** as the source, then run **Deploy Pages preview**. Serving the repository root directly sends raw JSX to the browser and produces a blank page.
+
+The preview supports sample movie browsing, search, sorting, details, and local favorites. Its banner explicitly identifies fictional data. Full-stack builds (`npm run build`) continue to use the Node API; no provider credentials are included in either frontend build.
+
+To check the preview locally: `npm run build -- --mode pages`, then `npm run preview`.
